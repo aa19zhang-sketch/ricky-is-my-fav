@@ -3,35 +3,87 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Hi Love ❤️</title>
+	<title>For Ricky</title>
 	<style>
 		:root {
-			/* Sky gradient */
-			--bg: linear-gradient(135deg, #e6f3ff 0%, #f7fbff 100%);
-			--card: #ffffff;
-			--accent: #ab7fff;
-			--accent-hover: #936aff;
-			--text: #1a1a1a;
-			--shadow: 0 8px 24px rgba(0,0,0,0.1);
+			/* Romantic night sky palette */
+			--bg: radial-gradient(circle at top, #3b2a7a 0%, #120b35 40%, #050014 100%);
+			--card: rgba(255, 255, 255, 0.9);
+			--accent: #ff8ac9;
+			--accent-hover: #ff6fb9;
+			--text: #ffffff;
+			--shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 			--radius: 20px;
 		}
+
 		* { box-sizing: border-box; }
 
 		body {
 			margin: 0;
 			font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-			background: var(--bg);
-			/* Keep the gradient fixed during scroll */
-			background-attachment: fixed;
-			color: var(--text);
 			min-height: 100dvh;
 			display: grid;
 			place-items: center;
 			padding: 24px;
 			text-align: center;
+			color: var(--text);
+			background: var(--bg);
+			overflow: hidden;
+			position: relative;
 		}
 
-		main { width: 100%; max-width: 560px; }
+		/* Night sky star background */
+		body::before,
+		body::after {
+			content: "";
+			position: fixed;
+			inset: -50%;
+			background-repeat: repeat;
+			opacity: 0.8;
+			pointer-events: none;
+			z-index: -3;
+		}
+
+		body::before {
+			background-image:
+				radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.8) 50%, transparent 60%),
+				radial-gradient(1.2px 1.2px at 80% 30%, rgba(255,255,255,0.7) 50%, transparent 60%),
+				radial-gradient(1px 1px at 25% 75%, rgba(255,255,255,0.6) 50%, transparent 60%),
+				radial-gradient(1.3px 1.3px at 60% 10%, rgba(255,255,255,0.9) 50%, transparent 60%);
+			animation: driftStars 120s linear infinite;
+		}
+
+		body::after {
+			background-image:
+				radial-gradient(1.4px 1.4px at 15% 10%, rgba(255,255,255,0.5) 40%, transparent 60%),
+				radial-gradient(1.6px 1.6px at 70% 60%, rgba(255,255,255,0.4) 40%, transparent 60%),
+				radial-gradient(1.2px 1.2px at 30% 35%, rgba(255,255,255,0.45) 40%, transparent 60%);
+			animation: driftStars 200s linear infinite;
+		}
+
+		@keyframes driftStars {
+			from { transform: translateY(0); }
+			to { transform: translateY(-300px); }
+		}
+
+		/* Moon */
+		.moon {
+			position: fixed;
+			top: 40px;
+			right: 50px;
+			width: 90px;
+			height: 90px;
+			border-radius: 50%;
+			background:
+				radial-gradient(circle at 30% 30%, #ffffff 0%, #ffeef6 35%, #f3d5ff 55%, rgba(255, 255, 255, 0) 70%);
+			box-shadow:
+				0 0 25px rgba(255, 235, 255, 0.8),
+				0 0 80px rgba(255, 200, 255, 0.65);
+			opacity: 0.93;
+			z-index: -2;
+		}
+
+		main { width: 100%; max-width: 560px; z-index: 0; }
 
 		h1 { margin: 0 0 8px; font-size: clamp(28px, 5vw, 40px); }
 		p.lead { margin: 0 0 20px; opacity: 0.9; }
@@ -42,7 +94,7 @@
 			border-radius: var(--radius);
 			box-shadow: var(--shadow);
 			font-size: 18px;
-			line-height: 1.45;
+			color: #1a1a1a;
 			min-height: 72px;
 			transition: opacity .25s ease;
 		}
@@ -59,148 +111,231 @@
 			margin-top: 8px;
 			padding: 10px 18px;
 			font-size: 16px;
-			border-radius: 8px;
+			border-radius: 999px;
 			border: none;
 			background: var(--accent);
 			color: #fff;
 			cursor: pointer;
-			transition: background-color .15s ease, transform .05s ease, opacity .2s ease;
+			transition: background .15s ease, transform .05s ease;
+			box-shadow: 0 6px 18px rgba(0,0,0,.25);
 		}
-		button.secondary {
-			background: #e1d6ff;
-			color: #2d225a;
-		}
-		button:hover { background: var(--accent-hover); }
-		button.secondary:hover { background: #d2c3ff; }
-		button:active { transform: translateY(1px); }
-		button:focus-visible {
-			outline: 3px solid color-mix(in oklab, var(--accent), white 25%);
-			outline-offset: 2px;
-		}
-		button[disabled] { opacity: 0.6; cursor: default; }
 
-		/* Animations */
+		button.secondary {
+			background: rgba(255,255,255,0.15);
+			color: #ffe9fb;
+			border: 1px solid rgba(255,255,255,0.3);
+		}
+
+		button:hover { transform: translateY(-1px); }
+		button.secondary:hover { background: rgba(255,255,255,0.25); }
+		button[disabled] { opacity: .5; cursor: default; }
+
+		.tip { font-size: 13px; opacity: .75; margin-top:8px; }
+
 		.fade-out { opacity: 0; }
-		@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 		.fade-in { animation: fadeIn .25s ease; }
+		@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+
+		/* Floating stars */
+		.float-star {
+			position: fixed;
+			font-size: 18px;
+			color: #ffe9ff;
+			opacity: .8;
+			text-shadow:
+				0 0 6px rgba(255,255,255,.8),
+				0 0 12px rgba(255,180,255,.6);
+			animation: floatUp 14s linear infinite;
+			z-index:-1;
+			pointer-events:none;
+		}
+
+		.float-star.s1 { left:12%; bottom:-10%; animation-delay:0s; }
+		.float-star.s2 { left:30%; bottom:-15%; font-size:22px; animation-delay:3s; }
+		.float-star.s3 { left:55%; bottom:-18%; font-size:16px; animation-delay:6s; }
+		.float-star.s4 { left:78%; bottom:-12%; font-size:20px; animation-delay:9s; }
+
+		@keyframes floatUp {
+			0% { transform: translateY(0) scale(.9); opacity:0; }
+			20% { opacity:.9; }
+			60% { transform: translateY(-60vh) scale(1.1); }
+			100% { transform: translateY(-90vh) scale(1.1); opacity:0; }
+		}
+
+		/* Secret clickable star */
+		.secret-star {
+			position: fixed;
+			bottom: 18px;
+			right: 18px;
+			font-size: 22px;
+			opacity: .25;
+			cursor: pointer;
+			text-shadow:
+				0 0 6px rgba(255,255,255,.8),
+				0 0 16px rgba(255,180,255,1);
+			transition: opacity .2s, transform .2s;
+			z-index:2;
+		}
+		.secret-star:hover {
+			opacity:1;
+			transform:scale(1.2);
+		}
+
+		footer {
+			margin-top:16px;
+			font-size:12px;
+			opacity:.75;
+		}
 	</style>
 </head>
+
 <body>
+	<div class="moon"></div>
+
+	<!-- Floating decorative stars -->
+	<div class="float-star s1">✦</div>
+	<div class="float-star s2">✧</div>
+	<div class="float-star s3">✶</div>
+	<div class="float-star s4">✩</div>
+
+	<!-- Secret clickable star -->
+	<div id="secretStar" class="secret-star" tabindex="0">✪</div>
+
 	<main>
 		<header>
 			<h1>🐧Hi Ricky🐧</h1>
 			<p class="lead">I put a lil bit of my feelings on the internet for you.</p>
 		</header>
 
-		<section aria-labelledby="reasons-title">
-			<h2 id="reasons-title" style="position: absolute; left: -9999px;">Reasons I love you</h2>
-			<div id="messageBox" role="status" aria-live="polite">
-				Please click next to see the reasons I love you!
-			</div>
-			<div class="actions">
-				<button id="prev" class="secondary" type="button" aria-label="Previous reason">Previous</button>
-				<button id="next" type="button" aria-label="Next reason">Next</button>
-			</div>
-			<p class="lead" style="font-size:14px; opacity:.7; margin-top:8px;">
-				Tips: ← or P for previous • →, Enter, or Space for next
-			</p>
-		</section>
+		<div id="messageBox">Please click next to see the reasons I love you!</div>
+
+		<div class="actions">
+			<button id="prev" class="secondary">Previous</button>
+			<button id="next">Next</button>
+		</div>
+
+		<p class="tip">Tips: ← or P for previous • →, Enter, or Space for next</p>
+
+		<footer>Wow look at moon. ✨</footer>
 	</main>
 
-	<script>
-		const reasons = [
-			"You make ordinary days feel special.",
-			"You have such a large capacity to give to the people around you.",
-			"I love how passionate you are whether it's your work, your friendships, your food.",
-			"You make me feel so beautiful. 🥹",
-			"I feel safe when I'm with you.",
-			"You make me feel so loved and cared for.",
-			"You give me hope that I don't have to face everything alone."
-		];
+<script>
+	/* Reasons */
+	const reasons = [
+		"You make ordinary days feel special.",
+		"You have such a large capacity to give to the people around you.",
+		"I love how passionate you are— whether it's your work, your friendships, or your cooking.",
+		"You make me feel so beautiful. 🥹",
+		"You make me feel safe and secure.",
+		"You make me feel so loved and cared for.",
+		"You give me hope that I don't have to face everything alone."
+	];
 
-		let index = 0;
-		const messageBox = document.getElementById("messageBox");
-		const nextBtn = document.getElementById("next");
-		const prevBtn = document.getElementById("prev");
+	/* Secret message */
+	const secretMessage =
+		"Ahhhh you found the secret message: out of everyone under this whole big sky, I'm really glad it's you 😉";
 
-		let animating = false;
-		const FADE_MS = 250;
-		const HALF_MS = 200; // slightly less than fade for a snappier swap
+	let index = -1; // start before the first reason
+	const messageBox = document.getElementById("messageBox");
+	const nextBtn = document.getElementById("next");
+	const prevBtn = document.getElementById("prev");
+	const secretStar = document.getElementById("secretStar");
 
-		function setReasonText(newIndex) {
-			index = (newIndex + reasons.length) % reasons.length;
-			messageBox.textContent = reasons[index];
-		}
+	let animating = false;
+	const HALF_MS = 200;
 
-		function animateSwap(getNextIndex) {
-			if (animating) return;
-			animating = true;
-			nextBtn.disabled = true;
-			prevBtn.disabled = true;
+	function updateButtons() {
+		// At the intro (index < 0): only Next is enabled
+		prevBtn.disabled = index <= 0;
+		nextBtn.disabled = index >= reasons.length - 1;
+	}
 
-			// fade out
-			messageBox.classList.add('fade-out');
+	function setReasonText(newIndex) {
+		index = newIndex;
+		messageBox.textContent = reasons[index];
+		updateButtons();
+	}
 
-			setTimeout(() => {
-				// swap text mid-transition
-				setReasonText(getNextIndex(index));
+	function animateSwap(nextIndex) {
+		if (animating) return;
+		animating = true;
 
-				// fade back in
-				messageBox.classList.remove('fade-out');
-				messageBox.classList.add('fade-in');
+		messageBox.classList.add("fade-out");
 
-				messageBox.addEventListener('animationend', () => {
-					messageBox.classList.remove('fade-in');
+		setTimeout(() => {
+			setReasonText(nextIndex);
+
+			messageBox.classList.remove("fade-out");
+			messageBox.classList.add("fade-in");
+
+			messageBox.addEventListener(
+				"animationend",
+				() => {
+					messageBox.classList.remove("fade-in");
 					animating = false;
-					nextBtn.disabled = false;
-					prevBtn.disabled = false;
-				}, { once: true });
-			}, HALF_MS);
+				},
+				{ once:true }
+			);
+		}, HALF_MS);
+	}
+
+	function showNext() {
+		if (index < reasons.length - 1) {
+			const targetIndex = index < 0 ? 0 : index + 1;
+			animateSwap(targetIndex);
 		}
+	}
 
-		function showNext() {
-			animateSwap(i => (i + 1) % reasons.length);
+	function showPrev() {
+		if (index > 0) {
+			animateSwap(index - 1);
 		}
+	}
 
-		function showPrev() {
-			animateSwap(i => (i - 1 + reasons.length) % reasons.length);
+	/* Secret star click */
+	function showSecretMessage() {
+		messageBox.classList.remove("fade-out", "fade-in");
+		messageBox.textContent = secretMessage;
+		// Keep buttons as they are (so he can still navigate back if he wants)
+		updateButtons();
+	}
+
+	nextBtn.addEventListener("click", showNext);
+	prevBtn.addEventListener("click", showPrev);
+	secretStar.addEventListener("click", showSecretMessage);
+
+	secretStar.addEventListener("keydown", (e) => {
+		if (e.key === "Enter" || e.key === " ") {
+			e.preventDefault();
+			showSecretMessage();
 		}
+	});
 
-		// Button clicks
-		nextBtn.addEventListener("click", showNext);
-		prevBtn.addEventListener("click", showPrev);
+	/* Keyboard navigation */
+	window.addEventListener("keydown", (e) => {
+		if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
 
-		// Keyboard shortcuts
-		window.addEventListener("keydown", (e) => {
-			// Ignore if typing in an input or textarea
-			const tag = document.activeElement?.tagName;
-			if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
+		if (e.code === "Space" || e.key === "Backspace") e.preventDefault();
 
-			// Space should not scroll the page
-			if (e.code === 'Space') e.preventDefault();
+		switch (e.key) {
+			case "ArrowRight":
+			case "Enter":
+			case " ":
+			case "n":
+			case "N":
+				showNext();
+				break;
+			case "ArrowLeft":
+			case "p":
+			case "P":
+				showPrev();
+				break;
+		}
+	});
 
-			switch (e.key) {
-				case 'ArrowRight':
-				case 'Enter':
-				case ' ':
-				case 'Spacebar': // legacy
-				case 'n':
-				case 'N':
-					showNext();
-					break;
-				case 'ArrowLeft':
-				case 'Backspace':
-				case 'p':
-				case 'P':
-					// Avoid navigating back in history on Backspace
-					if (e.key === 'Backspace') e.preventDefault();
-					showPrev();
-					break;
-			}
-		});
+	// Initialize button states for intro screen
+	updateButtons();
+</script>
 
-		console.log("Psst… check the console ;)");
-		console.log("YOU ARE MY ABSOLUTE FAVORITE. This my audition for a job at Future Foundry.");
-	</script>
 </body>
 </html>
