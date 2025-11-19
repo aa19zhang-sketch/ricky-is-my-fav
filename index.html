@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Hi Love ❤️</title>
+	<style>
+		:root {
+			/* Sky gradient */
+			--bg: linear-gradient(135deg, #e6f3ff 0%, #f7fbff 100%);
+			--card: #ffffff;
+			--accent: #ab7fff;
+			--accent-hover: #936aff;
+			--text: #1a1a1a;
+			--shadow: 0 8px 24px rgba(0,0,0,0.1);
+			--radius: 20px;
+		}
+		* { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+			background: var(--bg);
+			/* Keep the gradient fixed during scroll */
+			background-attachment: fixed;
+			color: var(--text);
+			min-height: 100dvh;
+			display: grid;
+			place-items: center;
+			padding: 24px;
+			text-align: center;
+		}
+
+		main { width: 100%; max-width: 560px; }
+
+		h1 { margin: 0 0 8px; font-size: clamp(28px, 5vw, 40px); }
+		p.lead { margin: 0 0 20px; opacity: 0.9; }
+
+		#messageBox {
+			background: var(--card);
+			padding: 20px;
+			border-radius: var(--radius);
+			box-shadow: var(--shadow);
+			font-size: 18px;
+			line-height: 1.45;
+			min-height: 72px;
+			transition: opacity .25s ease;
+		}
+
+		.actions {
+			display: flex;
+			justify-content: center;
+			gap: 10px;
+			margin-top: 16px;
+			flex-wrap: wrap;
+		}
+
+		button {
+			margin-top: 8px;
+			padding: 10px 18px;
+			font-size: 16px;
+			border-radius: 8px;
+			border: none;
+			background: var(--accent);
+			color: #fff;
+			cursor: pointer;
+			transition: background-color .15s ease, transform .05s ease, opacity .2s ease;
+		}
+		button.secondary {
+			background: #e1d6ff;
+			color: #2d225a;
+		}
+		button:hover { background: var(--accent-hover); }
+		button.secondary:hover { background: #d2c3ff; }
+		button:active { transform: translateY(1px); }
+		button:focus-visible {
+			outline: 3px solid color-mix(in oklab, var(--accent), white 25%);
+			outline-offset: 2px;
+		}
+		button[disabled] { opacity: 0.6; cursor: default; }
+
+		/* Animations */
+		.fade-out { opacity: 0; }
+		@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+		.fade-in { animation: fadeIn .25s ease; }
+	</style>
+</head>
+<body>
+	<main>
+		<header>
+			<h1>🐧Hi Ricky🐧</h1>
+			<p class="lead">I put a lil bit of my feelings on the internet for you.</p>
+		</header>
+
+		<section aria-labelledby="reasons-title">
+			<h2 id="reasons-title" style="position: absolute; left: -9999px;">Reasons I love you</h2>
+			<div id="messageBox" role="status" aria-live="polite">
+				Please click next to see the reasons I love you!
+			</div>
+			<div class="actions">
+				<button id="prev" class="secondary" type="button" aria-label="Previous reason">Previous</button>
+				<button id="next" type="button" aria-label="Next reason">Next</button>
+			</div>
+			<p class="lead" style="font-size:14px; opacity:.7; margin-top:8px;">
+				Tips: ← or P for previous • →, Enter, or Space for next
+			</p>
+		</section>
+	</main>
+
+	<script>
+		const reasons = [
+			"You make ordinary days feel special.",
+			"You have such a large capacity to give to the people around you.",
+			"I love how passionate you are whether it's your work, your friendships, your food.",
+			"You make me feel so beautiful. 🥹",
+			"I feel safe when I'm with you.",
+			"You make me feel so loved and cared for.",
+			"You give me hope that I don't have to face everything alone."
+		];
+
+		let index = 0;
+		const messageBox = document.getElementById("messageBox");
+		const nextBtn = document.getElementById("next");
+		const prevBtn = document.getElementById("prev");
+
+		let animating = false;
+		const FADE_MS = 250;
+		const HALF_MS = 200; // slightly less than fade for a snappier swap
+
+		function setReasonText(newIndex) {
+			index = (newIndex + reasons.length) % reasons.length;
+			messageBox.textContent = reasons[index];
+		}
+
+		function animateSwap(getNextIndex) {
+			if (animating) return;
+			animating = true;
+			nextBtn.disabled = true;
+			prevBtn.disabled = true;
+
+			// fade out
+			messageBox.classList.add('fade-out');
+
+			setTimeout(() => {
+				// swap text mid-transition
+				setReasonText(getNextIndex(index));
+
+				// fade back in
+				messageBox.classList.remove('fade-out');
+				messageBox.classList.add('fade-in');
+
+				messageBox.addEventListener('animationend', () => {
+					messageBox.classList.remove('fade-in');
+					animating = false;
+					nextBtn.disabled = false;
+					prevBtn.disabled = false;
+				}, { once: true });
+			}, HALF_MS);
+		}
+
+		function showNext() {
+			animateSwap(i => (i + 1) % reasons.length);
+		}
+
+		function showPrev() {
+			animateSwap(i => (i - 1 + reasons.length) % reasons.length);
+		}
+
+		// Button clicks
+		nextBtn.addEventListener("click", showNext);
+		prevBtn.addEventListener("click", showPrev);
+
+		// Keyboard shortcuts
+		window.addEventListener("keydown", (e) => {
+			// Ignore if typing in an input or textarea
+			const tag = document.activeElement?.tagName;
+			if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
+
+			// Space should not scroll the page
+			if (e.code === 'Space') e.preventDefault();
+
+			switch (e.key) {
+				case 'ArrowRight':
+				case 'Enter':
+				case ' ':
+				case 'Spacebar': // legacy
+				case 'n':
+				case 'N':
+					showNext();
+					break;
+				case 'ArrowLeft':
+				case 'Backspace':
+				case 'p':
+				case 'P':
+					// Avoid navigating back in history on Backspace
+					if (e.key === 'Backspace') e.preventDefault();
+					showPrev();
+					break;
+			}
+		});
+
+		console.log("Psst… check the console ;)");
+		console.log("YOU ARE MY ABSOLUTE FAVORITE. This my audition for a job at Future Foundry.");
+	</script>
+</body>
+</html>
