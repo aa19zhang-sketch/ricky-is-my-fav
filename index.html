@@ -226,12 +226,13 @@
 		"You have such a large capacity to give to the people around you.",
 		"I love how passionate you are— whether it's your work, your friendships, or your cooking.",
 		"And speaking of cooking, the food you make me is soooo yummy.",
-		"You make me feel so beautiful.🥹",
+		"You make me feel so beautiful. 🥹",
 		"You make me feel safe and secure.",
 		"You make me feel so loved and cared for.",
-		"You give me hope that I don't have to face everything alone."
-		"..."
-		"I'm sorry we can't celebrate Christmas together this year, but I look foward to all the Christmases we'll spend together and the traditions that will become part of us. I love you, and I miss you." 
+		"You give me hope that I don't have to face everything alone.",
+		"...",
+		"I'm sorry we can't celebrate Christmas together this year, but I look foward to all the Christmases we'll spend together and the traditions that will become part of us. I love you, and I miss you."
+	];
 
 	/* Secret message */
 	const secretMessage =
@@ -247,7 +248,6 @@
 	const HALF_MS = 200;
 
 	function updateButtons() {
-		// At the intro (index < 0): only Next is enabled
 		prevBtn.disabled = index <= 0;
 		nextBtn.disabled = index >= reasons.length - 1;
 	}
@@ -294,11 +294,9 @@
 		}
 	}
 
-	/* Secret star click */
 	function showSecretMessage() {
 		messageBox.classList.remove("fade-out", "fade-in");
 		messageBox.textContent = secretMessage;
-		// Keep buttons as they are (so he can still navigate back if he wants)
 		updateButtons();
 	}
 
@@ -313,7 +311,6 @@
 		}
 	});
 
-	/* Keyboard navigation */
 	window.addEventListener("keydown", (e) => {
 		if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
 
@@ -335,9 +332,9 @@
 		}
 	});
 
-	// Initialize button states for intro screen
 	updateButtons();
 </script>
+
 
 </body>
 </html>
