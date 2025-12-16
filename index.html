@@ -186,41 +186,6 @@
 			font-size:12px;
 			opacity:.75;
 		}
-
-		/* --- Mode styling: Thoughts --- */
-		body.mode-thoughts {
-			/* slightly softer + warmer mood shift */
-			filter: saturate(1.03) brightness(1.02);
-		}
-
-		body.mode-thoughts .moon {
-			/* a tiny tint shift so it feels different */
-			filter: hue-rotate(12deg) saturate(1.1);
-			opacity: 0.95;
-		}
-
-		body.mode-thoughts #messageBox {
-			/* softer “letter” feel */
-			box-shadow: 0 16px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.35);
-			background: rgba(255, 255, 255, 0.94);
-		}
-
-		/* Scrollable Thoughts content */
-		#messageBox.scrollable {
-			max-height: min(46vh, 360px);
-			overflow-y: auto;
-			text-align: left;
-			line-height: 1.6;
-			padding-right: 14px; /* room for scrollbar */
-		}
-
-		/* Subtle scrollbar styling (optional) */
-		#messageBox.scrollable::-webkit-scrollbar { width: 10px; }
-		#messageBox.scrollable::-webkit-scrollbar-thumb {
-			background: rgba(120, 80, 160, 0.35);
-			border-radius: 999px;
-		}
-		#messageBox.scrollable::-webkit-scrollbar-track { background: transparent; }
 	</style>
 </head>
 
@@ -247,7 +212,6 @@
 		<div class="actions">
 			<button id="prev" class="secondary">Previous</button>
 			<button id="next">Next</button>
-			<button id="toggle" class="secondary">Switch to Thoughts</button>
 		</div>
 
 		<p class="tip">Tips: ← or P for previous • →, Enter, or Space for next</p>
@@ -259,7 +223,7 @@
 	/* Reasons */
 	const reasons = [
 		"You make ordinary days feel special.",
-		"You have such a large capacity to give to the people around you, sometimes even at the expense of putting others before yourself.",
+		"You have such a large capacity to give to the people around you.",
 		"I love how passionate you are— whether it's your work, your friendships, or your cooking.",
 		"And speaking of cooking, the food you make me is soooo yummy.",
 		"You make me feel so beautiful. 🥹",
@@ -268,44 +232,28 @@
 		"You give me hope that I don't have to face everything alone."
 	];
 
-	/* Thoughts (scrollable, longer-form) */
-	const thoughts = [
-		"Some days I just sit and feel really grateful that our paths crossed.",
-		"I don’t always say this out loud, but you’ve changed how safe love feels to me.",
-		"I love the way you exist in the world — thoughtfully, deeply, and with so much care.",
-		"You don’t need to be anything more than who you already are for me."
-	];
-
 	/* Secret message */
 	const secretMessage =
 		"Ahhhh you found the secret message: out of everyone under this whole big sky, I'm really glad it's you 😉";
 
-	let mode = "reasons"; // "reasons" or "thoughts"
-	function getActiveList() {
-		return mode === "reasons" ? reasons : thoughts;
-	}
-
-	let index = -1; // start before the first item
+	let index = -1; // start before the first reason
 	const messageBox = document.getElementById("messageBox");
 	const nextBtn = document.getElementById("next");
 	const prevBtn = document.getElementById("prev");
 	const secretStar = document.getElementById("secretStar");
-	const toggleBtn = document.getElementById("toggle");
 
 	let animating = false;
 	const HALF_MS = 200;
 
 	function updateButtons() {
-		const list = getActiveList();
 		// At the intro (index < 0): only Next is enabled
 		prevBtn.disabled = index <= 0;
-		nextBtn.disabled = index >= list.length - 1;
+		nextBtn.disabled = index >= reasons.length - 1;
 	}
 
-	function setMessageText(newIndex) {
-		const list = getActiveList();
+	function setReasonText(newIndex) {
 		index = newIndex;
-		messageBox.textContent = list[index];
+		messageBox.textContent = reasons[index];
 		updateButtons();
 	}
 
@@ -316,7 +264,7 @@
 		messageBox.classList.add("fade-out");
 
 		setTimeout(() => {
-			setMessageText(nextIndex);
+			setReasonText(nextIndex);
 
 			messageBox.classList.remove("fade-out");
 			messageBox.classList.add("fade-in");
@@ -333,8 +281,7 @@
 	}
 
 	function showNext() {
-		const list = getActiveList();
-		if (index < list.length - 1) {
+		if (index < reasons.length - 1) {
 			const targetIndex = index < 0 ? 0 : index + 1;
 			animateSwap(targetIndex);
 		}
@@ -365,28 +312,6 @@
 		}
 	});
 
-	/* Toggle between Reasons and Thoughts */
-	toggleBtn.addEventListener("click", () => {
-		mode = mode === "reasons" ? "thoughts" : "reasons";
-		index = -1;
-
-		// Visual cue
-		document.body.classList.toggle("mode-thoughts", mode === "thoughts");
-
-		// Scrollable box only for thoughts
-		messageBox.classList.toggle("scrollable", mode === "thoughts");
-
-		messageBox.textContent =
-			mode === "reasons"
-				? "Please click next to see the reasons I love you!"
-				: "These are just some thoughts I wanted to share with you.";
-
-		toggleBtn.textContent =
-			mode === "reasons" ? "Switch to Thoughts" : "Back to Reasons";
-
-		updateButtons();
-	});
-
 	/* Keyboard navigation */
 	window.addEventListener("keydown", (e) => {
 		if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
@@ -410,8 +335,6 @@
 	});
 
 	// Initialize button states for intro screen
-	document.body.classList.remove("mode-thoughts");
-	messageBox.classList.remove("scrollable");
 	updateButtons();
 </script>
 
